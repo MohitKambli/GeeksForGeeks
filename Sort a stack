@@ -28,12 +28,12 @@ class SortedStack {
 class GfG {
     public Stack<Integer> sort(Stack<Integer> s) {
         // add code here.
-        PriorityQueue<Integer> maxHeap = new PriorityQueue<>((a, b) -> a - b);
+        PriorityQueue<Integer> heap = new PriorityQueue<>((a, b) -> a - b);
         while(!s.isEmpty())
-            maxHeap.add(s.pop());
+            heap.add(s.pop());
         Stack<Integer> ans = new Stack<>();
-        while(!maxHeap.isEmpty())
-            ans.push(maxHeap.poll());
+        while(!heap.isEmpty())
+            ans.push(heap.poll());
         return ans;
     }
 }
