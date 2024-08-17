@@ -1,0 +1,75 @@
+//{ Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            int n = Integer.parseInt(br.readLine().trim());
+            int[][] grid = new int[n][n];
+            for(int i = 0; i < n; i++){
+                String[] S = br.readLine().trim().split(" ");
+                for(int j = 0; j < n; j++){
+                    grid[i][j] = Integer.parseInt(S[j]);
+                }
+            }
+            Solution obj = new Solution();
+            boolean ans = obj.is_Possible(grid);
+            if(ans)
+                System.out.println("1");
+            else 
+                System.out.println("0");
+        }
+    }
+}
+// } Driver Code Ends
+
+
+
+class Solution
+{
+    //Function to find whether a path exists from the source to destination.
+    public boolean is_Possible(int[][] grid)
+    {
+        int n = grid.length;
+        int[] source = new int[]{-1,-1};
+        int[] destination = new int[]{-1,-1};
+        for(int i=0;i<n;i++) {
+            for(int j=0;j<n;j++) {
+                if(grid[i][j] == 1) {
+                    source[0] = i;
+                    source[1] = j;
+                } else if(grid[i][j] == 2) {
+                    destination[0] = i;
+                    destination[1] = j;
+                }
+            }
+        }
+        Set<String> set = new HashSet<>();
+        List<int[]> queue = new ArrayList<>();
+        queue.add(source);
+        set.add(source[0] + "," + source[1]);
+        int[][] directions = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+        while(!queue.isEmpty()) {
+            int[] cell = queue.remove(0);
+            if(cell[0] == destination[0] && cell[1] == destination[1])
+                return true;
+            int x = cell[0], y = cell[1];
+            for(int[] direction : directions) {
+                int dx = direction[0], dy = direction[1];
+                int newX = x + dx;
+                int newY = y + dy;
+                if(newX < 0 || newX == n || newY < 0 || newY == n || set.contains(newX + "," + newY) || grid[newX][newY] == 0)
+                    continue;
+                queue.add(new int[]{newX, newY});
+                set.add(newX + "," + newY);
+            }
+        }
+        return false;
+    }
+}
