@@ -1,0 +1,66 @@
+//{ Driver Code Starts
+import java.util.*;
+import java.lang.*;
+import java.io.*;
+class GFG
+{
+    public static void main(String[] args) throws IOException
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while(T-->0)
+        {
+            String[] s = br.readLine().trim().split(" ");
+            int n = Integer.parseInt(s[0]);
+            int[][] grid = new int[n][n];
+            for(int i = 0; i < n; i++){
+                String[] S = br.readLine().trim().split(" ");
+                for(int j = 0; j < n; j++){
+                    grid[i][j] = Integer.parseInt(S[j]);
+                }
+            }
+            Solution obj = new Solution();
+            int ans = obj.minimumCostPath(grid);
+            System.out.println(ans);
+        }
+    }
+}
+// } Driver Code Ends
+
+
+class Solution
+{
+    //Function to return the minimum cost to react at bottom
+	//right cell from top left cell.
+    public int minimumCostPath(int[][] grid)
+    {
+        // Code here
+        int n = grid.length;
+        boolean[][] visited = new boolean[n][n];
+        visited[0][0] = true;
+        PriorityQueue<int[]> heap = new PriorityQueue<>((a, b) -> Integer.compare(a[2], b[2]));
+        heap.add(new int[]{0, 0, grid[0][0]});
+        int[][] directions = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+        int[][] ans = new int[n][n];
+        for(int[] arr : ans)
+            Arrays.fill(arr, Integer.MAX_VALUE);
+        ans[0][0] = 0;
+        while(!heap.isEmpty()) {
+            int[] pair = heap.poll();
+            int x = pair[0], y = pair[1], cost = pair[2];
+            for(int[] direction : directions) {
+                int dx = direction[0], dy = direction[1];
+                int newX = x + dx, newY = y + dy;
+                if(newX < 0 || newX == n || newY < 0 || newY == n || visited[newX][newY])
+                    continue;
+                int adjCost = grid[newX][newY];
+                if(cost + adjCost < ans[newX][newY]) {
+                    ans[newX][newY] = cost + adjCost;
+                    visited[newX][newY] = true;
+                    heap.add(new int[]{newX, newY, cost + adjCost});
+                }
+            }
+        }
+        return ans[n-1][n-1];
+    }
+}
