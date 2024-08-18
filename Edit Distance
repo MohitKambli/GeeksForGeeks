@@ -1,0 +1,51 @@
+//{ Driver Code Starts
+import java.io.*;
+import java.lang.*;
+import java.util.*;
+
+class GFG {
+    public static void main(String[] args) throws IOException {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int T = Integer.parseInt(br.readLine().trim());
+        while (T-- > 0) {
+            String s1 = br.readLine();
+            String[] S = s1.split(" ");
+            String s = S[0];
+            String t = S[1];
+            Solution ob = new Solution();
+            int ans = ob.editDistance(s, t);
+            System.out.println(ans);
+        }
+    }
+}
+
+// } Driver Code Ends
+
+
+class Solution {
+    public int helper(int i, int j, String s, String t, int[][] dp) {
+        if(i < 0)
+            return j+1;
+        if(j < 0)
+            return i+1;
+        if(dp[i][j] != -1)
+            return dp[i][j];
+        
+        if(s.charAt(i) == t.charAt(j))
+            return dp[i][j] = helper(i-1, j-1, s, t, dp);
+        return dp[i][j] = 1 + Math.min(
+            helper(i-1, j-1, s, t, dp),
+            Math.min(
+                helper(i-1, j, s, t, dp),
+                helper(i, j-1, s, t, dp)
+            )
+        );
+    }
+    public int editDistance(String str1, String str2) {
+        int m = str1.length(), n = str2.length();
+        int[][] dp = new int[m][n];
+        for(int[] arr : dp)
+            Arrays.fill(arr, -1);
+        return helper(m-1, n-1, str1, str2, dp);
+    }
+}
